@@ -156,6 +156,24 @@ return {
         end,
         desc = "Goto Symbol (Workspace)",
       },
+      {
+        "<c-cr>",
+        function()
+          if vim.bo.filetype == "TelescopePrompt" then
+            require("telescope.actions").close(vim.api.nvim_get_current_buf())
+          else
+            local cached_pickers = require("telescope.state").get_global_key("cached_pickers")
+
+            if cached_pickers and next(cached_pickers) then
+              require("telescope.builtin").resume()
+            else
+              LazyVim.pick("files")
+            end
+          end
+        end,
+        desc = "Resume Picker",
+        mode = { "i", "n" },
+      },
     },
     opts = function()
       local actions = require("telescope.actions")
